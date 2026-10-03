@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 var seedOnly = args.Contains("--seed");
 var builder = WebApplication.CreateBuilder(args.Where(arg => arg != "--seed").ToArray());
+var renderPort = Environment.GetEnvironmentVariable("PORT");
+if (int.TryParse(renderPort, out var port))
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 if (seedOnly && !builder.Environment.IsDevelopment())
     throw new InvalidOperationException("Demo seeding is available only in the Development environment.");
 var dataDirectory = Path.Combine(builder.Environment.ContentRootPath, "Data");

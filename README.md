@@ -113,6 +113,14 @@ Create the parent directory first, and use the same connection string when seedi
 
 Email verification, password recovery, two-factor authentication, and outbound email/push delivery are not implemented. Messages are available in the app's Notifications screen.
 
+## Deploy the backend to Render
+
+This directory includes a Dockerfile and `render.yaml` Blueprint. In Render, create a **Blueprint** from the Git repository containing this directory and apply the `findmyid-api` service. If this directory is inside a larger repository, set the service's root directory to `backend` (or update the Blueprint paths to match your repository layout). Render builds the .NET 10 API as a Docker web service and checks `/api/health`.
+
+The Blueprint configures a 1 GB persistent disk mounted at `/var/data` and stores SQLite at `/var/data/findmyid.db`. Persistent disks require a paid Render web service plan; the Blueprint uses Starter so database contents survive deploys and restarts. Do not remove the disk or downgrade to an ephemeral service if you need to retain user data. Back up the SQLite file before destructive disk or service changes.
+
+After deployment, use the service's `https://...onrender.com` URL as the backend API base URL. Production uses HTTPS-only authentication cookies. The development seed accounts and fixtures are not created in Production. SQLite is suitable for a small single-instance deployment; use a managed database before scaling to multiple instances.
+
 ## Verify changes
 
 From the project root:

@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: findmyid-api
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__Database
+        value: Data Source=/var/data/findmyid.db
+    disk:
+      name: findmyid-data
+      mountPath: /var/data
+      sizeGB: 1
